@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   auto-run-job:
-    name: test prod environment pause
+    name: Auto-run job with no protection 
     runs-on: ubuntu-latest
     
     steps:
@@ -22,7 +22,7 @@ jobs:
         run: echo "This job is outside teh production environment"
 
   prod-run-job:
-    name: test prod environment pause
+    name: Prodcution environment job pause test
     runs-on: ubuntu-latest
     needs: auto-run-job
 
