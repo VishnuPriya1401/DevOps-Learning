@@ -1,0 +1,36 @@
+name: Prod environment Test approval workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch_to_deploy:
+        description: 'Branch to deploy'
+        required: true
+        default: 'git'
+
+permissions:
+  id-token: write
+  contents: read  
+
+jobs:
+  auto-run-job:
+    name: test prod environment pause
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: test run
+        run: echo "This job is outside teh production environment"
+
+  prod-run-job:
+    name: test prod environment pause
+    runs-on: ubuntu-latest
+    needs: auto-run-job
+
+    environment: production
+    
+    steps:
+      - name: test run
+        run: echo "This job is inside teh productin environment"      
+
+
+        
