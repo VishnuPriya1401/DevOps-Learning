@@ -11,15 +11,13 @@ on:
           - Linux
           - Git
 
-
 jobs:
-
   sonar-scan:
-
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write   # ← this is what was missing
+      
     steps:
-
       - name: Checkout Selected Branch
         uses: actions/checkout@v4
         with:
