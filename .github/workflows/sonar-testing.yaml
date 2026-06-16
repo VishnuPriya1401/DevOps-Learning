@@ -1,4 +1,4 @@
-name: Sonar-Testing Code
+name: Sonar-Testing Workflow
 
 on:
   workflow_dispatch:
