@@ -1,0 +1,32 @@
+name: SonarQube Branch Testing
+
+on:
+  repository_dispatch:
+    types:
+      - deploy
+
+jobs:
+
+  deploy-Git:
+
+    if: github.event.client_payload.environment == 'Git'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Deploy Git
+        run: |
+          echo "Deploying Git"
+
+  deploy-Linux:
+
+    if: github.event.client_payload.environment == 'Linux'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Deploy Linux
+        run: |
+          echo "Deploying Linux"
