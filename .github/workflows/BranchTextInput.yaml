@@ -1,0 +1,21 @@
+name: Text Input For Branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch_to_deploy:
+        description: 'Branch to deploy'
+        required: true
+        default: 'main'
+        type: string
+
+jobs:
+  sonar-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # ← this is what was missing
+      
+    steps:
+      - name: Display selected branch
+        run: |
+          echo "Branch selected: ${{ github.event.inputs.branch_to_deploy }}"
