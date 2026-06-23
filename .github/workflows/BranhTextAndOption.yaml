@@ -1,0 +1,33 @@
+name: Branch in Option and Text
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment_branch:
+        description: 'Standard branch'
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+
+      release_branch:
+        description: 'Release branch (e.g. release-1.0.0). Leave empty for dev/qa.'
+        required: false
+        type: string
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Determine branch
+        run: |
+          if [ -n "${{ github.event.inputs.release_branch }}" ]; then
+            BRANCH="${{ github.event.inputs.release_branch }}"
+          else
+            BRANCH="${{ github.event.inputs.environment_branch }}"
+          fi
+
+          echo "Using branch: $BRANCH"
+  
