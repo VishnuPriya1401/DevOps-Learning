@@ -10,6 +10,7 @@ on:
         options:
           - dev
           - qa
+          - develop-copy
 
       release_branch:
         description: 'Release branch (e.g. release-1.0.0). Leave empty for dev/qa.'
@@ -17,14 +18,21 @@ on:
         type: string
 
 jobs:
-  validate:
+ validate:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Determine branch
+      - name: Determine and validate branch
         run: |
           if [ -n "${{ github.event.inputs.release_branch }}" ]; then
             BRANCH="${{ github.event.inputs.release_branch }}"
+
+            # Validate release branch format
+            if [[ ! "$BRANCH" =~ ^release-.*$ ]]; then
+              echo "ERROR: Release branch must start with 'release-'"
+              exit 1
+            fi
+
           else
             BRANCH="${{ github.event.inputs.environment_branch }}"
           fi
