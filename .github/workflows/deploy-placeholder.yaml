@@ -1,0 +1,92 @@
+
+name: Deploy Wantverse Placeholder
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "site/**"
+      - ".github/workflows/deploy-placeholder.yml"
+      - ".github/workflows/deploy-site.yml"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    name: Prepare Placeholder Website
+    runs-on: ubuntu-latest
+
+    # The deployment role trusts the main branch only.
+    # This also restricts manual deployments to main.
+    if: github.ref == 'refs/heads/main'
+
+    outputs:
+      build_marker: ${{ steps.prepare.outputs.build_marker }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare deployment files
+        id: prepare
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BUILD_DIR="$RUNNER_TEMP/site"
+
+          # Ensure the source placeholder exists.
+          test -f site/index.html
+
+          # Prepare a clean deployment directory.
+          mkdir -p "$BUILD_DIR"
+          cp -R site/. "$BUILD_DIR/"
+
+          # Generate a deployment marker.
+          BUILD_MARKER="${GITHUB_SHA::12} $(date -u +'%FT%TZ')"
+
+          # Replace the placeholder marker in index.html.
+          sed -i "s|__BUILD_MARKER__|${BUILD_MARKER}|g" \
+            "$BUILD_DIR/index.html"
+
+          # Confirm that the marker was replaced.
+          if grep -q "__BUILD_MARKER__" "$BUILD_DIR/index.html"; then
+            echo "Build marker replacement failed."
+            exit 1
+          fi
+
+          echo "build_marker=${GITHUB_SHA::12}" >> "$GITHUB_OUTPUT"
+
+          echo "Placeholder website prepared successfully."
+
+      - name: Upload deployment artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wantverse-placeholder
+          path: ${{ runner.temp }}/site/
+          if-no-files-found: error
+          retention-days: 1
+
+  deploy:
+    name: Deploy Placeholder to DEV
+    needs: prepare
+    if: github.ref == 'refs/heads/main'
+
+    permissions:
+      contents: read
+      id-token: write
+
+    uses: ./.github/workflows/deploy-site.yml
+
+    with:
+      environment: dev
+      artifact_name: wantverse-placeholder
+      aws_role_arn: ${{ vars.DEV_DEPLOY_ROLE_ARN }}
+      bucket: ${{ vars.DEV_BUCKET }}
+      distribution_id: ${{ vars.DEV_DISTRIBUTION_ID }}
+      site_url: ${{ vars.DEV_SITE_URL }}
+      expect_marker: ${{ needs.prepare.outputs.build_marker }}
