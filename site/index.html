@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Wantverse frontend hosting placeholder">
+  <title>wantverse.io | Hosting Placeholder</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+
+    main {
+      width: min(90%, 620px);
+      padding: 48px 32px;
+      text-align: center;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+      margin-bottom: 12px;
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 500;
+      color: #475569;
+    }
+
+    p {
+      line-height: 1.6;
+      color: #64748b;
+    }
+
+    .environment {
+      display: inline-block;
+      margin: 16px 0;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .build-info {
+      margin-top: 28px;
+      padding: 18px;
+      background: #f8fafc;
+      border-radius: 8px;
+      overflow-wrap: anywhere;
+    }
+
+    .build-info p {
+      margin: 6px 0;
+      font-size: 13px;
+    }
+
+    footer {
+      margin-top: 28px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>wantverse.io</h1>
+
+    <h2>Frontend Hosting Placeholder</h2>
+
+    <div class="environment">
+      ENVIRONMENT: DEV
+    </div>
+
+    <p>
+      This page confirms that the Wantverse frontend hosting
+      infrastructure is deployed and serving content through
+      Amazon CloudFront.
+    </p>
+
+    <section class="build-info">
+      <p><strong>Build Marker</strong></p>
+      <p id="build-marker">__BUILD_MARKER__</p>
+    </section>
+
+    <footer>
+      Static hosting demonstration · Served via Amazon CloudFront
+    </footer>
+  </main>
+</body>
+</html>
